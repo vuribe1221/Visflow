@@ -1,3 +1,4 @@
+#!/bin/bash
 #just in case the folder is downloaded but not exported
 export PATH=~/icommands/:{$PATH}
 
