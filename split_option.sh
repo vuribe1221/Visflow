@@ -34,11 +34,22 @@ fi
 	
 #ask for file to split
 echo
+if [ $option == 3 -o $option == 4 ];then
+	sh ~/imake/check_irods_key.sh
+	if [ $? == 1 ];then
+		if [ -d ~/icommands ];then
+			export PATH=~/.icommands:${PATH}
+			iinit
+		fi
+	fi
+fi
+
 if [ $option == 1 -o $option == 2 ];then
 	ls
 	else
 	ils -r
 fi
+
 echo
 read -p "Which file should be split? " file_to_split
 
@@ -82,11 +93,6 @@ fi
 if [ $option == 3 ];then
 	read -p "How many times should it be split? " number_of_splits
 	# iget the file
-	sh check_irods_key.sh
-
-	if [ ! $? == 0 ];then	
-		sh login.sh
-	fi	
 
 	ils
 	echo
@@ -126,12 +132,6 @@ fi
 
 if [ $option == 4 ];then
 	
-	sh check_irods_key.sh
-
-        if [ ! $? == 0 ];then
-                sh login.sh
-        fi
-
         ils
         echo
         iget -fVP $file_to_split
