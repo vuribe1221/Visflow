@@ -82,13 +82,15 @@ fi
 if [ $option == 3 ];then
 	read -p "How many times should it be split? " number_of_splits
 	# iget the file
+	sh check_irods_key.sh
+
 	if [ ! $? == 0 ];then	
 		sh login.sh
 	fi	
 
 	ils
 	echo
-	iget -VP $file_to_split
+	iget -fVP $file_to_split
 
 	if [ -d ./chunks ];then
                 rm -r chunks
@@ -99,7 +101,7 @@ if [ $option == 3 ];then
 	echo $file_to_split >> path
 	tempfolder=$file_to_split
 	file_to_split=`basename $file_to_split`
-	echo $file_to_split
+	#echo $file_to_split
 
 	# split it
 	if [ -f $file_to_split ];then
@@ -107,9 +109,10 @@ if [ $option == 3 ];then
                 split -a 2 -dl$((`wc -l $file_to_split|sed 's/ .*$//'` / $number_of_splits + 1)) $file_to_split chunks/$file_to_split.
 
 	###### UPLOAD TO IRODS
-	tempfolder=`sed s/test1_grav_pos.txt//g path`
-	#echo $tempfolder
-	iput -r chunks/ $tempfolder
+	tempfolder=`sed s/$file_to_split//g path`
+        #echo "file_to_split=$file_to_split"
+	#echo "tempfolder=$tempfolder"
+	iput -fr chunks/ $tempfolder/
 	
 	
         else
@@ -117,8 +120,51 @@ if [ $option == 3 ];then
         echo "$(tput setaf 3)FILE NOT FOUND!$(tput sgr0)"
         exit 1
         fi
-
-# iput the files
-
-exit 1;
 fi
+
+#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#
+
+if [ $option == 4 ];then
+	
+	sh check_irods_key.sh
+
+        if [ ! $? == 0 ];then
+                sh login.sh
+        fi
+
+        ils
+        echo
+        iget -fVP $file_to_split
+
+        if [ -d ./splits ];then
+                rm -r splits
+        fi
+        mkdir splits
+
+        rm path
+        echo $file_to_split >> path
+        tempfolder=$file_to_split
+        file_to_split=`basename $file_to_split`
+        #echo $file_to_split
+
+        # split it
+        if [ -f $file_to_split ];then
+        #if exists -> split
+		awk '/SPLIT_HERE/{n++}{print>"splits/out"n".txt" }' $file_to_split
+	
+        ###### UPLOAD TO IRODS
+        tempfolder=`sed s/$file_to_split//g path`
+        #echo "file_to_split=$file_to_split"
+	#echo "tempfolder=$tempfolder"
+	iput -fr splits/ $tempfolder/
+
+
+        else
+        # if file is not found then break
+        echo "$(tput setaf 3)FILE NOT FOUND!$(tput sgr0)"
+        exit 1
+        fi
+
+fi
+
+#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#
