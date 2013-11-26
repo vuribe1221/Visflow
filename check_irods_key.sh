@@ -5,7 +5,7 @@ if [ ! -f ~/.irods/.irodsEnv ];then
 exit 1
 fi
 
-echo "DONE!"
+echo "Found Cookie! DONE!"
 exit 0
 
 

@@ -1,3 +1,4 @@
+A
 #Begin------Contents of split_option.sh
 #!/bin/bash
 clear
@@ -33,7 +34,11 @@ fi
 	
 #ask for file to split
 echo
-ls
+if [ $option == 1 -o $option == 2 ];then
+	ls
+	else
+	ils -r
+fi
 echo
 read -p "Which file should be split? " file_to_split
 
@@ -75,12 +80,37 @@ fi
 
 #_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#_#
 if [ $option == 3 ];then
+	read -p "How many times should it be split? " number_of_splits
+	# iget the file
+	if [ ! $? == 0];then	
+		sh login.sh
+	fi	
 
-# iget the file
-sh login.sh
-#sh ./getFolder.sh tmp
-ils
-# split it
+	ils
+	echo
+	iget -VP $file_to_split
+
+	if [ -d ./chunks ];then
+                rm -r chunks
+        fi
+        mkdir chunks
+
+	echo $file_to_split
+	file_to_split=`basename $file_to_split`
+	#echo $file_to_split
+
+	# split it
+	if [ -f $file_to_split ];then
+                #if exists -> split
+                split -a 2 -dl$((`wc -l $file_to_split|sed 's/ .*$//'` / $number_of_splits + 1)) $file_to_split chunks/$file_to_split.
+
+	###### UPLOAD TO IRODS
+	
+        else
+        # if file is not found then break
+        echo "$(tput setaf 3)FILE NOT FOUND!$(tput sgr0)"
+        exit 1
+        fi
 
 # iput the files
 
