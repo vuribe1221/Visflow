@@ -103,8 +103,7 @@ if [ $option == 3 ];then
         fi
         mkdir chunks
 	
-	rm path	
-	echo $file_to_split >> path
+	echo $file_to_split > path
 	tempfolder=$file_to_split
 	file_to_split=`basename $file_to_split`
 	#echo $file_to_split
@@ -141,8 +140,7 @@ if [ $option == 4 ];then
         fi
         mkdir splits
 
-        rm path
-        echo $file_to_split >> path
+        echo $file_to_split > path
         tempfolder=$file_to_split
         file_to_split=`basename $file_to_split`
         #echo $file_to_split
