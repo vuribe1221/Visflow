@@ -20,19 +20,18 @@
 
 
 #######################################################################
-<h5>Script file details</h5>
-check_irods_key.sh
+<h3>Script file details</h3>
+-check_irods_key.sh
 	checks for irods cookie in ~/.irods/.irodsEnv
 	exits with 0 for found
 	exits with 1 for not found
 
-getFolder.sh
+-getFolder.sh
 	gets the structure (recursively) of irods folder given as argument
 
-login.sh
+-login.sh
 	gets the pass for irods
 
-split_option.sh
+-split_option.sh
 	splits local or remote files found on irods and returns them from 	
-
-whence they came in either a /splits or /chunks directory
+	whence they came in either a /splits or /chunks directory
