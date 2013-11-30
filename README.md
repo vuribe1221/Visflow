@@ -20,7 +20,7 @@ Make sure either the irods folder has been exported to PATH and that the irods f
 
 
 #######################################################################
-Script file details
+<h3>Script file details</h3>
 
 check_irods_key.sh
 	checks for irods cookie in ~/.irods/.irodsEnv
