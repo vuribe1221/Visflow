@@ -20,7 +20,7 @@
 
 
 #######################################################################
-<h3>Script file details</h3>
+<h5>Script file details</h5>
 check_irods_key.sh
 	checks for irods cookie in ~/.irods/.irodsEnv
 	exits with 0 for found
