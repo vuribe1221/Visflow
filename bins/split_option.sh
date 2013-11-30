@@ -118,8 +118,8 @@ if [ $option == 3 ];then
         #echo "file_to_split=$file_to_split"
 	#echo "tempfolder=$tempfolder"
 	iput -fr chunks/ $tempfolder/
-	
-	
+	rm -r chunks/	
+	rm $file_to_split
         else
         # if file is not found then break
         echo "$(tput setaf 3)FILE NOT FOUND!$(tput sgr0)"
@@ -155,7 +155,8 @@ if [ $option == 4 ];then
         #echo "file_to_split=$file_to_split"
 	#echo "tempfolder=$tempfolder"
 	iput -fr splits/ $tempfolder/
-
+	rm -r splits/
+	rm $file_to_split
 
         else
         # if file is not found then break
