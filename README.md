@@ -1,22 +1,22 @@
-What is the minumum the user will need to input?
+<h5>What is the minumum the user will need to input?</h5>
 	If all goes well 'sh imake'
 
-Where is the irods configuration file stored?
+<h5>Where is the irods configuration file stored?</h5>
 	~/.irods/.irods/.irodsEnv
 
-What is located in the .irodsEnv file?
+<h5>What is located in the .irodsEnv file?</h5>
 	Everything needed for irods to connect to iplant except the password.
 
-How to store the password so we can connect to irods from other machines.
+<h5>How to store the password so we can connect to irods from other machines.</h5>
 	read -s -p "Enter irods password: " pass
 	iinit -e $pass
 	OR
 	Use the scrambled password file ~/.irods/.irodsA
 
-What format must the iplant folder be in?
+<h5>What format must the iplant folder be in?</h5>
 	There should be one directory with all the files needed including script and data files.
 
-Make sure either the irods folder has been exported to PATH and that the irods folder is found in ~/icommands.
+<h5>Make sure either the irods folder has been exported to PATH and that the irods folder is found in ~/icommands.</h5>
 
 
 #######################################################################
