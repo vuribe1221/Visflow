@@ -21,7 +21,7 @@
 
 #######################################################################
 <h3>Script file details</h3>
-
+<code>
 check_irods_key.sh
 	checks for irods cookie in ~/.irods/.irodsEnv
 	exits with 0 for found
@@ -37,5 +37,4 @@ split_option.sh
 	splits local or remote files found on irods and returns them from 	
 
 whence they came in either a /splits or /chunks directory
-
-
+</code>
