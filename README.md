@@ -17,3 +17,25 @@ What format must the iplant folder be in?
 	There should be one directory with all the files needed including script and data files.
 
 Make sure either the irods folder has been exported to PATH and that the irods folder is found in ~/icommands.
+
+
+#######################################################################
+Script file details
+
+check_irods_key.sh
+	checks for irods cookie in ~/.irods/.irodsEnv
+	exits with 0 for found
+	exits with 1 for not found
+
+getFolder.sh
+	gets the structure (recursively) of irods folder given as argument
+
+login.sh
+	gets the pass for irods
+
+split_option.sh
+	splits local or remote files found on irods and returns them from 	
+
+whence they came in either a /splits or /chunks directory
+
+
