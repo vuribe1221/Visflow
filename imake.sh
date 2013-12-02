@@ -2,6 +2,7 @@
 # use .sh for bash .py for python files
 script_suffix=.sh
 
+###################################################
 
 # login to get password and enable irods on local machine
 sh ~/imake/bins/login.sh
@@ -41,3 +42,6 @@ select yn in "Yes" "No"; do
     esac
 done
 
+#get number of chunks/splits
+num_chunks=`ils $dir/$data_dir|wc -l`
+echo $num_chunks-1|bc>>.config
