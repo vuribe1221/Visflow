@@ -1,6 +1,11 @@
 ##################### config ######################
 # use .sh for bash .py for python files
 script_suffix=.sh
+clear
+head -n 30 logo
+echo -e "\n\n\n"
+
+
 
 ###################################################
 
@@ -24,6 +29,7 @@ else
 		echo "$(tput setaf 2)MULTIPLE SCRIPTS FOUND!$(tput sgr0)"
 		ils $dir/|grep $script_suffix
 		read -p "$(tput setaf 3)Which file should be used?$(tput sgr0) " script_file
+		read -p "$(tput setaf 3)Enter arguments needed for the script:$(tputsgr0) " arguments
 	else
 		script_file=`ils $dir/*$script_suffix`
 	fi
@@ -45,3 +51,5 @@ done
 #get number of chunks/splits
 num_chunks=`ils $dir/$data_dir|wc -l`
 echo $num_chunks-1|bc>>.config
+echo $arguments>>.config
+
