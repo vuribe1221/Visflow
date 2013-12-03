@@ -6,7 +6,7 @@ script_suffix=.sh
 
 # login to get password and enable irods on local machine
 sh ~/imake/bins/login.sh
-
+ils -r 
 # get irods working directory
 read -p "$(tput setaf 3)What is the irods working directory?$(tput sgr0) " cwd
 echo $cwd>>.config
