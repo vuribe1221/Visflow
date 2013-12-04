@@ -4,6 +4,7 @@ script_suffix=.sh
 clear
 head -n 30 .logo
 echo -e "\n\n\n"
+export PATH=~/icommands/:${PATH}
 
 
 
@@ -29,13 +30,14 @@ else
 		echo "$(tput setaf 2)MULTIPLE SCRIPTS FOUND!$(tput sgr0)"
 		ils $dir/|grep $script_suffix
 		read -p "$(tput setaf 3)Which file should be used?$(tput sgr0) " script_file
-		read -p "$(tput setaf 3)Enter arguments needed for the script:$(tputsgr0) " arguments
+		echo $script_file >>.config
+		read -p "$(tput setaf 3)Enter arguments needed for the script:$(tput sgr0) " arguments
 	else
 		script_file=`ils $dir/*$script_suffix`
 	fi
 fi
 
-echo $script_file>>.config
+
 
 # get folder for data
 ils $dir/
