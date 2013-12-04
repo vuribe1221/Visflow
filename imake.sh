@@ -53,5 +53,18 @@ done
 #get number of chunks/splits
 num_chunks=`ils $dir/$data_dir|wc -l`
 echo $num_chunks-1|bc>>.config
+
 echo $arguments>>.config
-mv .config ./bins/.config
+line=`wc -l .config`
+echo $line
+#if [ $line = 7 ];then
+	mv .config ./bins/.config
+#else
+#	echo "ERROR NOT ENOUGH ARGUMENTS IN .CONFIG!!!"
+#	exit 1
+#fi
+
+#sh ./bins/makeMakeflow.sh
+#sh ./bins/makeVisflow.sh
+#cp ./bins/runMakeflow.sh ./bins/Makeflow_dir/
+#sh ./bins/Makeflow_dir/runMakeflow.sh

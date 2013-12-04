@@ -1,5 +1,7 @@
 # clear workspace
-rm visflow.sh*
+if [ -f visflow.sh0 ];then
+	rm visflow.sh*
+fi
 
 #set variables
 pass=`head -n 1 .config|tail -n 1`
@@ -10,11 +12,12 @@ mult_files=`head -n 4 .config|tail -n 1`
 file_or_dir=`head -n 5 .config|tail -n 1`
 num_chunks=`head -n 6 .config|tail -n 1`
 args=`head -n 7 .config|tail -n 1`
-i=0
 
+
+i=0
 while [ $i -lt $num_chunks ];
 do
-	echo 'export PATH=~/icommands:${PATH}'>>$main$i
+	echo 'export PATH=~/icommands:${PATH}'>>./Makeflow_dir/$main$i
 	echo "
 	iinit -e $pass
 	if [ ! -d ~/.irods ];then
@@ -27,7 +30,7 @@ do
 		tar -xf icommands.x86_64.tar.bz2
 		cp icommands ~/
 	
-	fi">>$main$i
+	fi">>./Makeflow_dir/$main$i
 
 <<COMMENT
 echo "
@@ -41,19 +44,19 @@ echo "
 COMMENT
 
 	if [ $i -lt 10 ];then
-		echo "iget -VP $dir/$file_or_dir/out0$i">>$main$i
-		echo "iget -VP $dir/$script">>$main$i
-		echo 'sh '"$script $args >out.$i">>$main$i
-		echo "imkdir $dir/output">>$main$i
-		echo "iput -f out.$i $dir/output">>$main$i
+		echo "iget -VP $dir/$file_or_dir/out0$i">>./Makeflow_dir/$main$i
+		echo "iget -VP $dir/$script">>./Makeflow_dir/$main$i
+		echo 'sh '"$script $args >out.$i">>./Makeflow_dir/$main$i
+		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
+		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
 
 	fi
 	if [ $i -gt 9 ];then
-		echo "iget -VP $dir/$file_or_dir/out$i">>$main$i
-		echo "iget -VP $dir/$script">>$main$i
-		echo 'sh '"$script $args>out.$i">>$main$i
-		echo "imkdir $dir/output">>$main$i
-		echo "iput -f out.$i $dir/output">>$main$i
+		echo "iget -VP $dir/$file_or_dir/out$i">>./Makeflow_dir/$main$i
+		echo "iget -VP $dir/$script">>./Makeflow_dir/$main$i
+		echo 'sh '"$script $args>out.$i">>./Makeflow_dir/$main$i
+		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
+		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
 
 	fi
 
