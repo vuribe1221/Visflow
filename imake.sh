@@ -2,7 +2,7 @@
 # use .sh for bash .py for python files
 script_suffix=.sh
 clear
-head -n 30 logo
+head -n 30 .logo
 echo -e "\n\n\n"
 
 
