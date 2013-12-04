@@ -52,4 +52,4 @@ done
 num_chunks=`ils $dir/$data_dir|wc -l`
 echo $num_chunks-1|bc>>.config
 echo $arguments>>.config
-
+mv .config ./bins/.config
