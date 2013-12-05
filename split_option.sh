@@ -81,7 +81,7 @@ if [ $option == 2 ];then
         fi
         mkdir splits
         if [ -f $file_to_split ];then
-                awk '/SPLIT_HERE/{n++}{print>"splits/out"n".txt" }' $file_to_split
+                awk '/SPLIT_HERE/{n++}{print>"chunks/out"n".txt" }' $file_to_split
         else
                 echo "$(tput setaf 3)FILE NOT FOUND!$(tput sgr0)"
                 exit 1
@@ -147,7 +147,7 @@ if [ $option == 4 ];then
         # split it
         if [ -f $file_to_split ];then
         #if exists -> split
-                awk '/SPLIT_HERE/{n++}{print>"splits/out"n".txt" }' $file_to_split
+                awk '/SPLIT_HERE/{n++}{print>"chunks/out"n".txt" }' $file_to_split
         
         ###### UPLOAD TO IRODS
         tempfolder=`sed s/$file_to_split//g path`

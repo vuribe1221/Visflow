@@ -44,16 +44,16 @@ echo "
 COMMENT
 
 	if [ $i -lt 10 ];then
-		echo "iget -VP $dir/$file_or_dir/out0$i">>./Makeflow_dir/$main$i
-		echo "iget -VP $dir/$script">>./Makeflow_dir/$main$i
+		echo "iget -fVP $dir/$file_or_dir/out0$i">>./Makeflow_dir/$main$i
+		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
 		echo 'sh '"$script $args >out.$i">>./Makeflow_dir/$main$i
 		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
 		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
 
 	fi
 	if [ $i -gt 9 ];then
-		echo "iget -VP $dir/$file_or_dir/out$i">>./Makeflow_dir/$main$i
-		echo "iget -VP $dir/$script">>./Makeflow_dir/$main$i
+		echo "iget -fVP $dir/$file_or_dir/out$i">>./Makeflow_dir/$main$i
+		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
 		echo 'sh '"$script $args>out.$i">>./Makeflow_dir/$main$i
 		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
 		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i

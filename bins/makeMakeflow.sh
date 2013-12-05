@@ -1,13 +1,17 @@
 #!/bin/bash
-pass=`head -n 1 .config|tail -n 1`
-dir=`head -n 2 .config|tail -n 1`
-#script=`head -n 3 .config|tail -n 1`
-single_file=`head -n 4 .config|tail -n 1`
-file_or_dir=`head -n 5 .config|tail -n 1`
-num_chunks=`head -n 6 .config|tail -n 1`
+config_file='.config'
+pass=`head -n 1 $config_file|tail -n 1`
+dir=`head -n 2 $config_file|tail -n 1`
+#script=`head -n 3 $config_file|tail -n 1`
+single_file=`head -n 4 $config_file|tail -n 1`
+file_or_dir=`head -n 5 $config_file|tail -n 1`
+num_chunks=`head -n 6 $config_file|tail -n 1`
 script='visflow.sh'
-
+echo $num_chunks
 ## create make folder for makeflow
+if [ -d Makeflow_dir ];then
+	rm -fr Makeflow_dir
+fi
 mkdir Makeflow_dir
 
 ## start making the Makeflow file
@@ -21,7 +25,7 @@ fi
 i=0
 while [ $i -lt $num_chunks ];
 	do
-	echo "output$i: $script$i .irodsEnv .config">>./Makeflow_dir/Makeflow
+	echo "output$i: $script$i .irodsEnv $config_file">>./Makeflow_dir/Makeflow
 	echo -e "\tsh $script$i > output$i">>./Makeflow_dir/Makeflow
 	
 	let i=$i+1

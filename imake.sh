@@ -46,7 +46,7 @@ echo "Is the data in one file?"
 select yn in "Yes" "No"; do
     case $yn in
         Yes ) read -p "$(tput setaf 3)What is the data file?$(tput sgr0) " data_file;echo "yes">>.config;echo $data_file >> .config;break;;
-        No ) read -p "$(tput setaf 3)What is the directory for the data files?$(tput sgr0)  " data_dir;echo "no">>.config;echo $data_dir >> .config;break;;
+        No ) read -p "$(tput setaf 3)What is the directory for the data files?$(tput sgr0) " data_dir;echo "no">>.config;echo $data_dir >> .config;break;;
     esac
 done
 
@@ -55,16 +55,18 @@ num_chunks=`ils $dir/$data_dir|wc -l`
 echo $num_chunks-1|bc>>.config
 
 echo $arguments>>.config
-line=`wc -l .config`
-echo $line
-#if [ $line = 7 ];then
+line=`wc -l .config|cut -d ' ' -f 1`
+if [ $line = 7 ];then
 	mv .config ./bins/.config
-#else
-#	echo "ERROR NOT ENOUGH ARGUMENTS IN .CONFIG!!!"
-#	exit 1
-#fi
-
-#sh ./bins/makeMakeflow.sh
-#sh ./bins/makeVisflow.sh
-#cp ./bins/runMakeflow.sh ./bins/Makeflow_dir/
-#sh ./bins/Makeflow_dir/runMakeflow.sh
+else
+	echo "ERROR NOT ENOUGH ARGUMENTS IN .CONFIG!!!"
+	exit 1
+fi
+cd bins/
+sh makeMakeflow.sh
+sh makeVisflow.sh
+cp runMakeflow.sh Makeflow_dir/
+cd Makeflow_dir
+cp ~/.irods/.irodsEnv .
+cp ../.config .
+sh runMakeflow.sh
