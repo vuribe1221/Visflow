@@ -1,3 +1,5 @@
 export PATH=~/cctools/bin/:${PATH}
-rm Makeflow.*
+if [ -f Makeflow.makeflowlog];then
+	rm Makeflow.*
+fi
 makeflow -T wq -aN vuribe -p 55500

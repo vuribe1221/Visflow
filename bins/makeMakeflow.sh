@@ -7,7 +7,7 @@ single_file=`head -n 4 $config_file|tail -n 1`
 file_or_dir=`head -n 5 $config_file|tail -n 1`
 num_chunks=`head -n 6 $config_file|tail -n 1`
 script='visflow.sh'
-echo $num_chunks
+
 ## create make folder for makeflow
 if [ -d Makeflow_dir ];then
 	rm -fr Makeflow_dir

@@ -42,7 +42,27 @@ echo "
 	$num_chunks
 "
 COMMENT
+if [ $mult_files = yes ];then
+	if [ $i -lt 10 ];then
+		echo "iget -fVP $dir/$file_or_dir">>./Makeflow_dir/$main$i
+		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
+		echo 'sh '"$script $args >out.$i">>./Makeflow_dir/$main$i
+		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
+		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
 
+	fi
+	if [ $i -gt 9 ];then
+		echo "iget -fVP $dir/$file_or_dir">>./Makeflow_dir/$main$i
+		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
+		echo 'sh '"$script $args>out.$i">>./Makeflow_dir/$main$i
+		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
+		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
+
+	fi
+
+fi
+
+if [ $mult_files = no ];then
 	if [ $i -lt 10 ];then
 		echo "iget -fVP $dir/$file_or_dir/out0$i">>./Makeflow_dir/$main$i
 		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
@@ -52,13 +72,13 @@ COMMENT
 
 	fi
 	if [ $i -gt 9 ];then
-		echo "iget -fVP $dir/$file_or_dir/out$i">>./Makeflow_dir/$main$i
+		echo "iget -fVP $dir/$file_or_dir/out0$i">>./Makeflow_dir/$main$i
 		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
 		echo 'sh '"$script $args>out.$i">>./Makeflow_dir/$main$i
 		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
 		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
-
 	fi
+fi
 
 
 let i=$i+1
