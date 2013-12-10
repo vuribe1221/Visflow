@@ -27,7 +27,7 @@ fi
 i=1
 while [ $i -lt $num_chunks ];
 	do
-	echo "$name$i: $script$i .irodsEnv $config_file check_sum.sh">>./Makeflow_dir/Makeflow
+	echo "$name$i: $script$i .irodsEnv $config_file">>./Makeflow_dir/Makeflow
 	echo -e "\t$prefix $script$i > $name$i">>./Makeflow_dir/Makeflow
 	
 	let i=$i+1

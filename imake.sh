@@ -100,7 +100,7 @@ sh makeMakeflow.sh
 sh makeVisflow.sh
 cp runMakeflow.sh Makeflow_dir/
 cd Makeflow_dir
-cp ../check_sum.sh .
+#cp ../check_sum.sh .
 cp ~/.irods/.irodsEnv .
 cp ../.config .
 sh runMakeflow.sh
