@@ -1,4 +1,6 @@
 #!/bin/bash
+prefix='sh'
+
 config_file='.config'
 pass=`head -n 1 $config_file|tail -n 1`
 dir=`head -n 2 $config_file|tail -n 1`
@@ -7,7 +9,7 @@ single_file=`head -n 4 $config_file|tail -n 1`
 file_or_dir=`head -n 5 $config_file|tail -n 1`
 num_chunks=`head -n 6 $config_file|tail -n 1`
 script='visflow.sh'
-
+name=`basename $file_or_dir`
 ## create make folder for makeflow
 if [ -d Makeflow_dir ];then
 	rm -fr Makeflow_dir
@@ -22,11 +24,11 @@ if [ $single_file = yes ];then
 	num_chunks=1
 fi
 
-i=0
+i=1
 while [ $i -lt $num_chunks ];
 	do
-	echo "output$i: $script$i .irodsEnv $config_file">>./Makeflow_dir/Makeflow
-	echo -e "\tsh $script$i > output$i">>./Makeflow_dir/Makeflow
+	echo "$name$i: $script$i .irodsEnv $config_file check_sum.sh">>./Makeflow_dir/Makeflow
+	echo -e "\t$prefix $script$i > $name$i">>./Makeflow_dir/Makeflow
 	
 	let i=$i+1
 done

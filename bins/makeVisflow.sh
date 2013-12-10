@@ -1,4 +1,5 @@
 # clear workspace
+prefix=''
 if [ -f visflow.sh0 ];then
 	rm visflow.sh*
 fi
@@ -8,13 +9,20 @@ pass=`head -n 1 .config|tail -n 1`
 dir=`head -n 2 .config|tail -n 1`
 script=`head -n 3 .config|tail -n 1`
 main='visflow.sh'
-mult_files=`head -n 4 .config|tail -n 1`
+single_file=`head -n 4 .config|tail -n 1`
 file_or_dir=`head -n 5 .config|tail -n 1`
 num_chunks=`head -n 6 .config|tail -n 1`
 args=`head -n 7 .config|tail -n 1`
-
-
-i=0
+com_exists=`head -n 8 .config|tail -n 1`
+com_file=`head -n 9 .config|tail -n 1`
+com_sum=`head -n 10 .config|tail -n 1`
+#name=`basename $file_or_dir`
+name=`head -n 11 .config|tail -n 1`
+file_or_dir=`echo $file_or_dir|sed "s/\/$name//g"`
+if [ $single_file = yes ];then
+	let num_chunks=1
+fi
+i=1
 while [ $i -lt $num_chunks ];
 do
 	echo 'export PATH=~/icommands:${PATH}'>>./Makeflow_dir/$main$i
@@ -32,54 +40,45 @@ do
 	
 	fi">>./Makeflow_dir/$main$i
 
-<<COMMENT
-echo "
-	$pass
-	$dir
-	$script
-	$mult_files
-	$file_or_dir
-	$num_chunks
-"
-COMMENT
-if [ $mult_files = yes ];then
+if [ $single_file = yes ];then
+	
 	if [ $i -lt 10 ];then
-		echo "iget -fVP $dir/$file_or_dir">>./Makeflow_dir/$main$i
-		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
-		echo 'sh '"$script $args >out.$i">>./Makeflow_dir/$main$i
-		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
-		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
+		# iget necessary files
+		echo 'export PATH=~/lastz-distrib/bin/:${PATH}'>>./Makeflow_dir/$main$i
+		echo "iget -fP $dir/$file_or_dir/$name$>>iget_files">>./Makeflow_dir/$main$i
+		if [ $com_exists = yes ];then
+			echo -e "if [ ! -f ~/$com_file ];then\n\tiget -fVP $dir/$com_file ~/>>iget_files\nfi">>./Makeflow_dir/$main$i
+		fi
+		echo "cp ~/$com_file .">>./Makeflow_dir/$main$i
+		echo "iget -fP $dir/$script>>iget_files">>./Makeflow_dir/$main$i
+		# commands for worker
+		echo "$prefix $script $com_file $file_or_dir $args >$file_or_dir.out">>./Makeflow_dir/$main$i
+
+		# output directory
+		echo "imkdir -p $dir/visflow_output">>./Makeflow_dir/$main$i
+		echo "iput -f $file_or_dir.out $dir/visflow_output">>./Makeflow_dir/$main$i
 
 	fi
-	if [ $i -gt 9 ];then
-		echo "iget -fVP $dir/$file_or_dir">>./Makeflow_dir/$main$i
-		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
-		echo 'sh '"$script $args>out.$i">>./Makeflow_dir/$main$i
-		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
-		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
+else 
+	if [ $i -lt 100 ];then
+		# iget necessary files
+		echo 'export PATH=~/lastz-distrib/bin/:${PATH}'>>./Makeflow_dir/$main$i
+		echo "iget -fP $dir/input-files/$name$i>>iget_files">>./Makeflow_dir/$main$i
+		if [ $com_exists = yes ];then
+			echo -e "if [ ! -f ~/$com_file ];then\n\tiget -fVP $dir/$com_file ~/>>iget_files\nfi">>./Makeflow_dir/$main$i
+		fi
+		echo "cp ~/$com_file .">>./Makeflow_dir/$main$i
+		echo "iget -fP $dir/$script>>iget_files">>./Makeflow_dir/$main$i
+	
+		# commands for worker
+		echo "$prefix $script $com_file $name$i $args >$name$i.out">>./Makeflow_dir/$main$i
 
-	fi
+		# output directory
+		echo "imkdir -p $dir/visflow_output">>./Makeflow_dir/$main$i
+		echo "iput -f $name$i.out $dir/visflow_output">>./Makeflow_dir/$main$i
 
-fi
-
-if [ $mult_files = no ];then
-	if [ $i -lt 10 ];then
-		echo "iget -fVP $dir/$file_or_dir/out0$i">>./Makeflow_dir/$main$i
-		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
-		echo 'sh '"$script $args >out.$i">>./Makeflow_dir/$main$i
-		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
-		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
-
-	fi
-	if [ $i -gt 9 ];then
-		echo "iget -fVP $dir/$file_or_dir/out0$i">>./Makeflow_dir/$main$i
-		echo "iget -fVP $dir/$script">>./Makeflow_dir/$main$i
-		echo 'sh '"$script $args>out.$i">>./Makeflow_dir/$main$i
-		echo "imkdir $dir/output">>./Makeflow_dir/$main$i
-		echo "iput -f out.$i $dir/output">>./Makeflow_dir/$main$i
 	fi
 fi
-
 
 let i=$i+1
 done
