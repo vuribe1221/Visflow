@@ -1,7 +1,7 @@
 <h5>What is Visflow?</h5>
-	Visflow is a shell toolchain used to decrease the time and effort it takes to go from personal computer 
-	simulating to the cloud. This program is used in conjunction with the iplant datastore and futuregrid to 
-	make using the cloud almost trivial.
+	Visflow is a shell toolchain used to decrease the time and effort it takes to go from personal computer to
+	the cloud. This program is used in conjunction with the iplant datastore and futuregrid to make using the
+	cloud almost trivial.
 <h5>Who does it appeal to?</h5>
 	 The main demographic that will benefit from this is the research and data intensive community.
 
@@ -40,9 +40,9 @@
 	
 
 ######################################################################
-Latest update:
-	+ reduced the number of files by making functions rather than seperate .sh files.
-	+ no passwords are ever stored (you must be logged into irods on host and worker computers)
-	+ error catching
-	+ simple step-by-step instructions
-	+ Visflow.info integration
+Latest update:   
+	+ reduced the number of files by making functions rather than seperate .sh files.   
+	+ no passwords are ever stored (you must be logged into irods on host and worker computers)   
+	+ error catching   
+	+ simple step-by-step instructions   
+	+ Visflow.info integration   
