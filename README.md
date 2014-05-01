@@ -1,5 +1,9 @@
-<h5>What is Visflow and who does it appeal to?</h5>
-	Visflow is a shell toolchain used to decrease the time and effort it takes to go from personal computer simulating to the cloud. This program is used in conjunction with the iplant datastore and futuregrid to make using the cloud almost trivial. The main demographic that will benefit from this is the research and data intensive community.
+<h5>What is Visflow?</h5>
+	Visflow is a shell toolchain used to decrease the time and effort it takes to go from personal computer 
+	simulating to the cloud. This program is used in conjunction with the iplant datastore and futuregrid to 
+	make using the cloud almost trivial.
+<h5>Who does it appeal to?</h5>
+	 The main demographic that will benefit from this is the research and data intensive community.
 
 <h5>How is Visflow used?</h5>
 	In any bash (shell) clone the git repo and run visflow.sh by using 'sh visflow.sh'.
