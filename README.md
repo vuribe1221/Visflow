@@ -46,3 +46,10 @@ Latest update:
 	+ error catching   
 	+ simple step-by-step instructions   
 	+ Visflow.info integration   
+
+######################################################################
+Future updates:   
+	+ clean up after computation is done   
+	+ ability to take in multiple data files   
+	+ expand documentation   
+	+ make tutorial video   
