@@ -1,107 +1,190 @@
 ##################### config ######################
-# use .sh for bash .py for python files
-script_suffix=NONE
+
 clear
 head -n 30 .logo
 echo -e "\n\n\n"
+
 export PATH=~/icommands/:${PATH}
-
-
+export PATH=~/cctools/bin/:${PATH}
 
 ###################################################
 
 # login to get password and enable irods on local machine
-sh ~/imake/bins/login.sh
-ils -r 
-if [ ! $? = 0 ];then
-	echo "An error occured when logging into irods! Bad password?"
-	exit 1
-fi
-# get irods working directory
-read -p "$(tput setaf 3)What is the irods working directory?$(tput sgr0) " cwd
-echo -e "\n\n\n\n\n\n\n"
-echo $cwd>>.config
-# if more than 1 script file exists prompt which to use
-#dir=`head -n 2 .config|tail -n 1`
-if [ ! $script_suffix = NONE ];then
+# sh ~/imake/bins/login.sh
+
+load_config() {
+	
+	#tell me the settings file
+	settings_file=settings.sh
+	
+	#get script suffix
+	script_suffix=`head -n 7 $settings_file|tail -n 1`
+
+	#get port number
+	port=`head -n 9 $settings_file|tail -n 1`
+
+	#get public allowed y/n\n\n
+	pub_allowed=`head -n 11 $settings_file|tail -n 1`
+	
+	#get name of program
+	visname=`head -n 13 $settings_file|tail -n 1`
+	
+	#get public allowed y/n
+	show_stats=`head -n 15 $settings_file|tail -n 1`
+	
+	#get password
+	pass=`head -n 17 $settings_file|tail -n 1`
+	
+	#save the whales?
+	save_whales=`head -n 19 $settings_file|tail -n 1`
+	
+	#number of cores to use
+	num_cores=`head -n 21 $settings_file|tail -n 1`
+
+	#email address to report to
+	email=`head -n 23 $settings_file|tail -n 1`
+}
+
+irods_login () {
+	#anyone else's login is overridden
+
+	
+	#ask for password
+	read -s -p "Enter irods password: " password
+		
+	#login with password
+	iinit -e $password
+	
+	EC=$?
+	if [ ! $EC -eq 0 ]; then
+		say "Password is Invalid!"
+		exit 777
+	fi
+	
+	echo -e "\n"
+}
+
+confirm (){
+	echo "Is $1 correct?"
+	echo $2
+	select yn in "Yes" "No"; do
+		case $yn in
+			Yes ) echo "Writing to file!";break;;
+			No ) exit 12;;
+		esac
+	done
+}
+
+clean_up (){
+	#remove useless or 1time files
+	echo "not used yet"
+}
+
+ask (){
+	# use quotation marks around question param
+	read -p "$(tput setaf 3) $1 $(tput sgr0)" $2
+	echo -e "\n\n"
+}
+
+say (){
+	echo -e "$(tput setaf 3) $1 $(tput sgr0)\n\n"
+}
+
+get_cmd (){
+	echo -e "\n$exec $script_file $arguments $data_file\n" 
+}
+
+load_config
+if [ ! -f bins/.config ];then
+	
+	if [ -z $1 ];
+	then
+		irods_login
+	fi
+
+	ils
+	# get irods working directory
+	ask "What is the irods working directory?" cwd
+
+	# get how to execute the script (python,sh,java)
+	ask "What is needed to execute script/program? (sh,python,...)" exec
+
+	# if more than 1 script file exists prompt which to use
 	num_of_scripts=`ils $cwd|grep -c $script_suffix`
-	if [ $num_of_scripts -lt 1  ];then
-		echo "SCRIPT FILE NOT FOUND!"
-		exit 1
+
+	if [ $num_of_scripts -lt 1 ];then
+		say "SCRIPT FILE NOT FOUND!"
+		exit 404
 	else
 		if [ $num_of_scripts -gt 1 ];then
-			echo "$(tput setaf 2)MULTIPLE SCRIPTS FOUND!$(tput sgr0)"
+			say "MULTIPLE SCRIPTS FOUND!"
 			ils $cwd/|grep $script_suffix
-			read -p "$(tput setaf 3)Which file should be used?$(tput sgr0) " script_file
+			ask "Which file should be used? " script_file
+			ask "Enter arguments needed for the script: " arguments
 		else
-			echo "Found script file!"
-			script_file=`ils $cwd/|grep $script_suffix`
-			echo "Using $script_file"
+			script_file=`ils $cwd|grep $script_suffix`
+			ask "Enter arguments needed for the script: " arguments
 		fi
 	fi
-else 
+
+	# get folder for data
 	ils $cwd
-	read -p "$(tput setaf 3)What is the program file?$(tput sgr0) " script_file
-fi
-			read -p "$(tput setaf 3)Enter arguments needed for the script:$(tput sgr0) " arguments
-# check for a common file
-echo "Is there a common file?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes ) read -p "$(tput setaf 3)What is the common file?$(tput sgr0) " common_file;common=yes;com_sum=`ichksum $cwd/$common_file|grep $common_file|sed "s/$common_file//g"|sed "s/ //g"`;break;;
-        No ) common_file=" ";common=no;break;;
-    esac
-done
 
-# get folder for data
-echo "Is the data(input) in one file?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes ) read -p "$(tput setaf 3)What is the data file?$(tput sgr0) " data_file;yn=yes;break;;
-        No ) read -p "$(tput setaf 3)What is the directory for the data files?$(tput sgr0) " data_file;yn=no;break;;
-    esac
-done
+	echo "Is the data in one file?"
+	select yn in "Yes" "No"; do
+		case $yn in
+			Yes ) ask "What is the data file? " data_file;yn=yes;num_chunks=1;break;;
+			No ) ask "What is the directory for the data files? " data_file;num_chunks=`ils $cwd/$data_dir|wc -l`;yn=no;break;;
+		esac
+	done
 
-#get number of chunks
-name=`basename $data_file`
-echo $name
-datafolder=`echo $data_file|sed "s/\/$name//g"`
-echo $datafolder
-num_chunks=`ils $cwd/$datafolder|wc -l`
-echo $cwd
-echo $data_file
-echo $num_chunks
-## make the .config
+	get_cmd
 
-	#echo $cwd>>.config
-	echo $script_file>>.config
-	echo $yn>>.config
-	echo $data_file>>.config
-	echo $num_chunks>>.config
-	echo $arguments>>.config
-	echo $common>>.config
-	echo $common_file>>.config
-	echo $com_sum>>.config
-	echo $name>>.config
-# make sure the .config file has the necessary info
-line=`wc -l .config|cut -d ' ' -f 1`
-if [ $line -gt 6 ];then
-	mv .config ./bins/.config
+	confirm command `$getcmd`
+
+	## make the .config
+		echo $exec>.config
+		echo $cwd>>.config
+		echo $script_file>>.config
+		echo $yn>>.config
+		echo $data_file>>.config
+		echo $num_chunks>>.config
+		echo $arguments>>.config
+
+	# make sure the .config file has the necessary info
+	line=`wc -l .config|cut -d ' ' -f 1`
+	if [ $line -gt 6 ];then
+			mv .config ./bins/.config
+	else
+			echo "ERROR NOT ENOUGH ARGUMENTS IN .CONFIG!!!"
+			exit 1
+	fi
 else
-	echo "ERROR NOT ENOUGH ARGUMENTS IN .CONFIG!!!"
-	exit 1
+	head -n 10 bins/.config
+	say "Would you like to load last .config file? (1/2): "
+	select yn in "Yes" "No"; do
+		case $yn in
+			Yes ) echo "Loading last config...";break;;
+			No ) rm bins/.config;say "Please restart visflow.";exit 0;break;;
+		esac
+	done
 fi
 
-debug=0
-if [ $debug = 0 ];then
 ## run external scripts
 cd bins/
 sh makeMakeflow.sh
 sh makeVisflow.sh
-cp runMakeflow.sh Makeflow_dir/
+
 cd Makeflow_dir
-#cp ../check_sum.sh .
-cp ~/.irods/.irodsEnv .
-cp ../.config .
-sh runMakeflow.sh
-fi
+
+case $save_whales in
+	Y)echo -e "\t.";echo -e "       \":\"";echo -e "     ___:____     |\"\/\"|";echo -e "   ,'        \`.    \  /";echo -e "   |  O        \___/  |";echo -e "~^~^~^~^~^~^~^~^~^~^~^~^~";;
+	N)echo "WARNING: whales will not be saved!";;
+esac
+
+case $pub_allowed in
+	Y)makeflow -T wq -aN $visname -p $port -m $email;;
+	N)makeflow -T wq -N $visname -p $port -m $email;;
+esac
+
+
