@@ -1,4 +1,4 @@
-t is the config file?
+#what is the config file?
 config_file='.config'
 
 #instantiate .config variables
