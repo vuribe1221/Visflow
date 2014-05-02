@@ -15,7 +15,7 @@ export PATH=~/cctools/bin/:${PATH}
 load_config() {
 	
 	#tell me the settings file
-	settings_file=settings.sh
+	settings_file=settings
 	
 	#get script suffix
 	script_suffix=`head -n 7 $settings_file|tail -n 1`
