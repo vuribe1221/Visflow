@@ -1,0 +1,24 @@
+#Settings.sh
+#This is the settings file. The configuration is line sensitive(adding or subtracting a line will change the functionality)! Do not change unless you absolutely know what you are doing.
+
+#lines 7,9,11,13,15,17,19,21
+
+#	Script Suffixes suffix for script file (py = python, sh = shell, etc) doesn't really matter except by the computer ultimately running the file.
+sh
+#	port number that makeflow is allowed to use(higher the better since firewalls are usually below 50000)
+55500
+#	publicly shown:this will disable the name below
+Y
+#	give name: if visible this will be the name that will show when using worqueue_status
+Visflow.info
+#	visflow.info: show statistics on visflow.info
+Y
+#	password: must not be blank , this is only to encrypt the workers within makeflow
+visflowWorksForMe
+#	save the whales: :)
+Y
+#	number of cores: number of cores that makeflow should use
+2
+#	email address to send summary to upon success or failure
+test@test.com
+
